@@ -12,40 +12,28 @@ import kotlinx.android.synthetic.main.fragment_keyboard.*
 class ConvertActivity : AppCompatActivity() {
 
     lateinit var editViewModel: MainViewModel
-    lateinit var spinnerViewModel: MainViewModel
+    lateinit var spinnerViewModel: SpinnerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_convert)
         editViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        //TODO
-        val spinnerArray :Array<String>
-
-        val token = intent.getStringExtra("token")
-        println(token)
-        if(token == "distance")
-        {
-            spinnerArray = arrayOf("Kil", "met", "ant")
-        }
-        else if(token == "weight")
-        {
-            spinnerArray = arrayOf("il", "et", "nt")
-        }
-        else
-        {
-            spinnerArray = arrayOf("l", "t", "t")
-        }
-        val adapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Применяем адаптер к элементу spinner
-        input_spinner.setAdapter(adapter)
+        spinnerViewModel = ViewModelProvider(this, SpinnerFactory(application,
+            intent.getStringExtra("token").toString())).get(SpinnerViewModel::class.java)
     }
 
     override fun onStart() {
         super.onStart()
         editViewModel.liveData.observe(this, Observer {
             input_edit.setText(it)
+        })
+
+        spinnerViewModel.liveData.observe(this, Observer {
+            val adapter: ArrayAdapter<String> =
+                ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, it!!)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            input_spinner.setAdapter(adapter)
+            output_spinner.setAdapter(adapter)
         })
 
         zero_button.setOnClickListener(){
