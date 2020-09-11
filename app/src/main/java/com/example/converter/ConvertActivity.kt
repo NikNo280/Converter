@@ -24,16 +24,28 @@ class ConvertActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        val adapter: ArrayAdapter<String> =
+            ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                spinnerViewModel.liveData.value!!
+            )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         editViewModel.liveData.observe(this, Observer {
             input_edit.setText(it)
         })
 
         spinnerViewModel.liveData.observe(this, Observer {
-            val adapter: ArrayAdapter<String> =
-                ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, it!!)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             input_spinner.setAdapter(adapter)
             output_spinner.setAdapter(adapter)
+        })
+
+        spinnerViewModel.liveInputItem.observe(this, Observer {
+            input_spinner.setSelection(adapter.getPosition(it!!))
+        })
+
+        spinnerViewModel.liveOutputItem.observe(this, Observer {
+            output_spinner.setSelection(adapter.getPosition(it!!))
         })
 
         zero_button.setOnClickListener(){
@@ -84,5 +96,11 @@ class ConvertActivity : AppCompatActivity() {
             editViewModel.liveData.value = ""
         }
 
+        convert_button.setOnClickListener()
+        {
+            spinnerViewModel.liveInputItem.value = input_spinner.getSelectedItem().toString()
+            spinnerViewModel.liveOutputItem.value = output_spinner.getSelectedItem().toString()
+            output_edit.setText(String.format("%.3f\n", (editViewModel.liveData.value!!.toDouble() * spinnerViewModel.getCoefficient())))
+        }
     }
 }
