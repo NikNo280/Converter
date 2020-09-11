@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData
 
 class MainViewModel(application: Application):AndroidViewModel(application) {
 
-    val liveData = MutableLiveData<String>()
+    val inputEditLiveData = MutableLiveData<String>()
+    val outputEditLiveData = MutableLiveData<String>()
     init {
-        liveData.value = ""
+        inputEditLiveData.value = ""
+        outputEditLiveData.value = ""
     }
 }

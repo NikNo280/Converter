@@ -31,10 +31,13 @@ class ConvertActivity : AppCompatActivity() {
                 spinnerViewModel.liveData.value!!
             )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        editViewModel.liveData.observe(this, Observer {
+        editViewModel.inputEditLiveData.observe(this, Observer {
             input_edit.setText(it)
         })
 
+        editViewModel.outputEditLiveData.observe(this, Observer {
+            output_edit.setText(it)
+        })
         spinnerViewModel.liveData.observe(this, Observer {
             input_spinner.setAdapter(adapter)
             output_spinner.setAdapter(adapter)
@@ -49,58 +52,61 @@ class ConvertActivity : AppCompatActivity() {
         })
 
         zero_button.setOnClickListener(){
-            editViewModel.liveData.value += "0"
+            editViewModel.inputEditLiveData.value += "0"
         }
 
         one_button.setOnClickListener(){
-            editViewModel.liveData.value += "1"
+            editViewModel.inputEditLiveData.value += "1"
         }
 
         two_button.setOnClickListener(){
-            editViewModel.liveData.value += "2"
+            editViewModel.inputEditLiveData.value += "2"
         }
 
         three_button.setOnClickListener(){
-            editViewModel.liveData.value += "3"
+            editViewModel.inputEditLiveData.value += "3"
         }
 
         four_button.setOnClickListener(){
-            editViewModel.liveData.value += "4"
+            editViewModel.inputEditLiveData.value += "4"
         }
 
         five_button.setOnClickListener(){
-            editViewModel.liveData.value += "5"
+            editViewModel.inputEditLiveData.value += "5"
         }
 
         six_button.setOnClickListener(){
-            editViewModel.liveData.value += "6"
+            editViewModel.inputEditLiveData.value += "6"
         }
 
         seven_button.setOnClickListener(){
-            editViewModel.liveData.value += "7"
+            editViewModel.inputEditLiveData.value += "7"
         }
 
         eight_button.setOnClickListener(){
-            editViewModel.liveData.value += "8"
+            editViewModel.inputEditLiveData.value += "8"
         }
 
         nine_button.setOnClickListener(){
-            editViewModel.liveData.value += "9"
+            editViewModel.inputEditLiveData.value += "9"
         }
 
         point_button.setOnClickListener(){
-            editViewModel.liveData.value += "."
+            if(editViewModel.inputEditLiveData.value != "" && editViewModel.inputEditLiveData.value!!.indexOf(".") <= 1)
+            {
+                editViewModel.inputEditLiveData.value += "."
+            }
         }
 
         clear_button.setOnClickListener(){
-            editViewModel.liveData.value = ""
+            editViewModel.inputEditLiveData.value = ""
         }
 
         convert_button.setOnClickListener()
         {
             spinnerViewModel.liveInputItem.value = input_spinner.getSelectedItem().toString()
             spinnerViewModel.liveOutputItem.value = output_spinner.getSelectedItem().toString()
-            output_edit.setText(String.format("%.3f\n", (editViewModel.liveData.value!!.toDouble() * spinnerViewModel.getCoefficient())))
+            editViewModel.outputEditLiveData.value = String.format("%.3f\n", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
         }
     }
 }
