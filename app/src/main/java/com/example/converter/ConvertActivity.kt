@@ -111,12 +111,13 @@ class ConvertActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
 
         convert_button.setOnClickListener()
         {
-            spinnerViewModel.liveInputItem.value = input_spinner.selectedItem.toString()
-            spinnerViewModel.liveOutputItem.value = output_spinner.selectedItem.toString()
-            editViewModel.outputEditLiveData.value = String.format("%.3f\n", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
+            if(editViewModel.inputEditLiveData.value != "")
+            {
+                spinnerViewModel.liveInputItem.value = input_spinner.selectedItem.toString()
+                spinnerViewModel.liveOutputItem.value = output_spinner.selectedItem.toString()
+                editViewModel.outputEditLiveData.value = String.format("%.3f\n", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
+            }
         }
-
-
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {

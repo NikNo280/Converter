@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graf"
     app:startDestination="@id/choiseFragment">
+    <activity
+        android:id="@+id/convertActivity"
+        android:name="com.example.converter.ConvertActivity"
+        android:label="activity_convert"
+        tools:layout="@layout/activity_convert" />
     <fragment
         android:id="@+id/choiseFragment"
         android:name="com.example.converter.ChoiseFragment"
@@ -13,9 +18,4 @@
             android:id="@+id/action_choiseFragment_to_convertActivity"
             app:destination="@id/convertActivity" />
     </fragment>
-    <activity
-        android:id="@+id/convertActivity"
-        android:name="com.example.converter.ConvertActivity"
-        android:label="activity_convert"
-        tools:layout="@layout/activity_convert" />
 </navigation>
