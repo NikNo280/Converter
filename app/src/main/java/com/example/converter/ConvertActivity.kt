@@ -1,6 +1,8 @@
 package com.example.converter
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -9,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_display.*
 import kotlinx.android.synthetic.main.fragment_keyboard.*
 
 
-class ConvertActivity : AppCompatActivity() {
+class ConvertActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     lateinit var editViewModel: MainViewModel
     lateinit var spinnerViewModel: SpinnerViewModel
@@ -20,6 +22,7 @@ class ConvertActivity : AppCompatActivity() {
         editViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         spinnerViewModel = ViewModelProvider(this, SpinnerFactory(application,
             intent.getStringExtra("token").toString())).get(SpinnerViewModel::class.java)
+
     }
 
     override fun onStart() {
@@ -30,7 +33,11 @@ class ConvertActivity : AppCompatActivity() {
                 android.R.layout.simple_spinner_item,
                 spinnerViewModel.liveData.value!!
             )
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        input_spinner.onItemSelectedListener = this
+        output_spinner.onItemSelectedListener = this
+
         editViewModel.inputEditLiveData.observe(this, Observer {
             input_edit.setText(it)
         })
@@ -104,9 +111,20 @@ class ConvertActivity : AppCompatActivity() {
 
         convert_button.setOnClickListener()
         {
-            spinnerViewModel.liveInputItem.value = input_spinner.getSelectedItem().toString()
-            spinnerViewModel.liveOutputItem.value = output_spinner.getSelectedItem().toString()
+            spinnerViewModel.liveInputItem.value = input_spinner.selectedItem.toString()
+            spinnerViewModel.liveOutputItem.value = output_spinner.selectedItem.toString()
             editViewModel.outputEditLiveData.value = String.format("%.3f\n", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
         }
+
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        spinnerViewModel.liveInputItem.value = input_spinner.selectedItem.toString()
+        spinnerViewModel.liveOutputItem.value = output_spinner.selectedItem.toString()
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>) {
+        // Another interface callback
     }
 }
