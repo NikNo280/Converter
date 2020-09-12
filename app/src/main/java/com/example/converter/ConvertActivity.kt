@@ -1,5 +1,8 @@
 package com.example.converter
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -109,14 +112,27 @@ class ConvertActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             editViewModel.inputEditLiveData.value = ""
         }
 
-        convert_button.setOnClickListener()
-        {
+        convert_button.setOnClickListener() {
             if(editViewModel.inputEditLiveData.value != "")
             {
                 spinnerViewModel.liveInputItem.value = input_spinner.selectedItem.toString()
                 spinnerViewModel.liveOutputItem.value = output_spinner.selectedItem.toString()
                 editViewModel.outputEditLiveData.value = String.format("%.3f\n", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
             }
+        }
+
+        save_input_button.setOnClickListener() {
+            val clipboard =
+                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("text", editViewModel.inputEditLiveData.value)
+            clipboard.setPrimaryClip(clip)
+        }
+
+        save_output_button.setOnClickListener() {
+            val clipboard =
+                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("text", editViewModel.outputEditLiveData.value)
+            clipboard.setPrimaryClip(clip)
         }
     }
 
