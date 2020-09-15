@@ -117,7 +117,8 @@ class ConvertActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
             {
                 spinnerViewModel.liveInputItem.value = input_spinner.selectedItem.toString()
                 spinnerViewModel.liveOutputItem.value = output_spinner.selectedItem.toString()
-                editViewModel.outputEditLiveData.value = String.format("%.3f\n", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
+                val str = String.format("%.3f", (editViewModel.inputEditLiveData.value!!.toDouble() * spinnerViewModel.getCoefficient()))
+                editViewModel.outputEditLiveData.value = str.replace(',', '.')
             }
         }
 
@@ -133,6 +134,17 @@ class ConvertActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener 
                 getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("text", editViewModel.outputEditLiveData.value)
             clipboard.setPrimaryClip(clip)
+        }
+
+        exchange_button.setOnClickListener()
+        {
+            var temp = editViewModel.inputEditLiveData.value
+            editViewModel.inputEditLiveData.value = editViewModel.outputEditLiveData.value
+            editViewModel.outputEditLiveData.value = temp
+
+            temp = spinnerViewModel.liveInputItem.value
+            spinnerViewModel.liveInputItem.value = spinnerViewModel.liveOutputItem.value
+            spinnerViewModel.liveOutputItem.value = temp
         }
     }
 
