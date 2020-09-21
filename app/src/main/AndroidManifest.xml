@@ -13,10 +13,6 @@
             android:name=".ConvertActivity"
             android:label="@string/title_activity_convert"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".ChoiceActivity"
-            android:label="@string/title_activity_choice"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
